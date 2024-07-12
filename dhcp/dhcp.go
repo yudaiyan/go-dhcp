@@ -28,6 +28,8 @@ type dhcp struct {
 	transactionID dhcpv4.TransactionID
 	handle        *pcap.Handle
 	ctx           context.Context
+	// 整个过程超时时间
+	timeout time.Duration
 }
 
 // 构建用于广播的eth、ipv4、udp层
@@ -128,7 +130,7 @@ func (s *dhcp) filter(packet gopacket.Packet) error {
 
 func (s *dhcp) dhclient() error {
 	var cancel context.CancelFunc
-	s.ctx, cancel = context.WithTimeout(context.Background(), time.Second*5)
+	s.ctx, cancel = context.WithTimeout(context.Background(), s.timeout)
 	defer cancel()
 
 	// 提前监听eth层，并使用异步回调
@@ -236,9 +238,14 @@ func (s *dhcp) dhclient() error {
 }
 
 func StartDhcp(ifname string) error {
+	return StartDhcpTimeout(ifname, time.Hour*24*365)
+}
+
+func StartDhcpTimeout(ifname string, timeout time.Duration) error {
 	client := dhcp{
-		ifname: ifname,
-		ch:     make(chan *dhcpv4.DHCPv4),
+		ifname:  ifname,
+		ch:      make(chan *dhcpv4.DHCPv4),
+		timeout: timeout,
 	}
 	mac, err := netlink.GetMac(ifname)
 	if err != nil {
