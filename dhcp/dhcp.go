@@ -89,15 +89,40 @@ func (s *dhcp) openLive() error {
 	return nil
 }
 
-// 监听eth包
+// 监听所有数据包，包括非eth。
+// 不要使用 handle.SetBPFFilter 过滤包。
+// 否则 packetSource.Packets() 无法获取到eof。
 func (s *dhcp) listen(asyncCallback func(*gopacket.PacketSource)) error {
-	filter := fmt.Sprintf("udp and src port %d and dst port %d and ether dst host %s", dhcpv4.ServerPort, dhcpv4.ClientPort, hardwareAddrToMACString(s.localMac))
-	err := s.handle.SetBPFFilter(filter)
+	packetSource := gopacket.NewPacketSource(s.handle, s.handle.LinkType())
+	go asyncCallback(packetSource)
+	return nil
+}
+
+// 通过以下方式过滤出需要的包，而不是 s.handle.SetBPFFilter
+func (s *dhcp) filter(packet gopacket.Packet) error {
+	var eth layers.Ethernet
+	var ipv4 layers.IPv4
+	var udp layers.UDP
+	var dhcp layers.DHCPv4
+	parser := gopacket.NewDecodingLayerParser(
+		layers.LayerTypeEthernet,
+		&eth,
+		&ipv4,
+		&udp,
+		&dhcp,
+	)
+	foundLayerTypes := []gopacket.LayerType{}
+	err := parser.DecodeLayers(packet.Data(), &foundLayerTypes)
 	if err != nil {
 		return errors.New(err)
 	}
-	packetSource := gopacket.NewPacketSource(s.handle, s.handle.LinkType())
-	go asyncCallback(packetSource)
+	if len(foundLayerTypes) < 4 {
+		return errors.Errorf("not found all layers")
+	}
+
+	if udp.SrcPort != dhcpv4.ServerPort || udp.DstPort != dhcpv4.ClientPort {
+		return errors.Errorf("udp的端口不匹配")
+	}
 	return nil
 }
 
@@ -118,6 +143,11 @@ func (s *dhcp) dhclient() error {
 			case <-s.ctx.Done():
 				return
 			case packet := <-packetSource.Packets():
+				if err := s.filter(packet); err != nil {
+					log.Println(err)
+					continue
+				}
+
 				dhcpLayer := packet.Layer(layers.LayerTypeDHCPv4)
 				if dhcpLayer == nil {
 					log.Println("非dhcp包")
