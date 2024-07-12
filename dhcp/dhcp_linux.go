@@ -83,7 +83,7 @@ func (s *dhcp) sendBroadcast(payload *dhcpv4.DHCPv4) error {
 // 打开网卡，用于监听和发送eth包
 func (s *dhcp) openLive() error {
 	// handle, err := pcap.OpenLive(s.ifname, 65535, true, pcap.BlockForever)
-	handle, err := pcap.OpenLive(s.ifname, 1600, false, pcap.BlockForever)
+	handle, err := pcap.OpenLive(s.ifname, 65535, false, pcap.BlockForever)
 	if err != nil {
 		return errors.New(err)
 	}
