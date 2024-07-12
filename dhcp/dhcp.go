@@ -235,12 +235,6 @@ func (s *dhcp) dhclient() error {
 	return nil
 }
 
-func hardwareAddrToMACString(hwaddr net.HardwareAddr) string {
-	macString := fmt.Sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
-		hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5])
-	return macString
-}
-
 func StartDhcp(ifname string) error {
 	client := dhcp{
 		ifname: ifname,
