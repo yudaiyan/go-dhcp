@@ -14,7 +14,6 @@ import (
 	"github.com/insomniacslk/dhcp/dhcpv4"
 	"github.com/insomniacslk/dhcp/dhcpv4/nclient4"
 	"github.com/yudaiyan/go-netlink/netlink"
-	"github.com/yudaiyan/go-tap/tap"
 )
 
 type dhcp struct {
@@ -225,7 +224,7 @@ func (s *dhcp) dhclient() error {
 			ones, _ := m.SubnetMask().Size()
 			cidrStr := fmt.Sprintf("%s/%d", m.YourIPAddr.String(), ones)
 			// 设置网卡的ip、mask
-			err := tap.AddrAdd(s.ifname, cidrStr)
+			err := netlink.AddrAdd(s.ifname, cidrStr)
 			if err != nil {
 				return errors.New(err)
 			}
