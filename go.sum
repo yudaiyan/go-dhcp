@@ -29,8 +29,8 @@ github.com/vishvananda/netlink v1.1.0/go.mod h1:cTgwzPIzzgDAYoQrMm0EdrjRUBkTqKYp
 github.com/vishvananda/netns v0.0.0-20191106174202-0a2b9b5464df/go.mod h1:JP3t17pCcGlemwknint6hfoeCVQrEMVwxRLRjXpq+BU=
 github.com/vishvananda/netns v0.0.4 h1:Oeaw1EM2JMxD51g9uhtC0D7erkIjgmj8+JZc26m1YX8=
 github.com/vishvananda/netns v0.0.4/go.mod h1:SpkAiCQRtJ6TvvxPnOSyH3BMl6unz3xZlaprSwhNNJM=
-github.com/yudaiyan/go-netlink v0.0.3 h1:KKP+bIi4qXMaRbTAaiFJ4julXYB45voWOt25BJw5QC0=
-github.com/yudaiyan/go-netlink v0.0.3/go.mod h1:SgJSlcuHMtCOJ7w2xjRdIr9cGuNhca+iyu/hQQrflGE=
+github.com/yudaiyan/go-netlink v0.0.4 h1:pBJz4XECjbYD8aak/Kvno/byjwV+nUd4qr+WwyOKTmQ=
+github.com/yudaiyan/go-netlink v0.0.4/go.mod h1:SgJSlcuHMtCOJ7w2xjRdIr9cGuNhca+iyu/hQQrflGE=
 github.com/yudaiyan/gonetsh v0.0.1 h1:kYU+uB+wuTgyoPmJKS44CQvyxVpXHnm4T5GFiggWL8Q=
 github.com/yudaiyan/gonetsh v0.0.1/go.mod h1:PxW0Q5MI5VdQHUiOCx6DsLvRHUZ+nCx2CMx1ERj7y/E=
 golang.org/x/net v0.23.0 h1:7EYJ93RZ9vYSZAIb2x3lnuvqO5zneoD6IvWjuhfxjTs=

@@ -6,7 +6,7 @@ require (
 	github.com/go-errors/errors v1.5.1
 	github.com/gopacket/gopacket v1.2.0
 	github.com/insomniacslk/dhcp v0.0.0-20240710054256-ddd8a41251c9
-	github.com/yudaiyan/go-netlink v0.0.3
+	github.com/yudaiyan/go-netlink v0.0.4
 )
 
 require (
